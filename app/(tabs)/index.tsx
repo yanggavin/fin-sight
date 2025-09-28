@@ -50,7 +50,7 @@ export default function DashboardScreen() {
   };
 
   const handleIdentifyFish = () => {
-    Alert.alert('Fish Identification', 'AI fish identification feature coming soon!');
+    router.push('/identify-fish');
   };
 
   const handleLogCatch = async () => {

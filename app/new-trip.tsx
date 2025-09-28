@@ -143,23 +143,29 @@ export default function NewTripScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ThemedView style={styles.container}>
-        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        
-        {/* Sticky Header */}
-        <View style={[styles.header, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
-          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-            <IconSymbol name="xmark" size={20} color={Colors[colorScheme ?? 'light'].text} />
-          </TouchableOpacity>
-          <ThemedText style={styles.headerTitle}>Log Catch</ThemedText>
-          <View style={styles.headerSpacer} />
-        </View>
+    <ThemedView style={styles.container}>
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      
+      {/* Sticky Header */}
+      <View style={[styles.header, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <IconSymbol name="xmark" size={20} color={Colors[colorScheme ?? 'light'].text} />
+        </TouchableOpacity>
+        <ThemedText style={styles.headerTitle}>Log Catch</ThemedText>
+        <View style={styles.headerSpacer} />
+      </View>
 
-        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView 
+        style={styles.keyboardContainer} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView 
+          style={styles.scrollContainer} 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
 
           {/* Species Selection */}
           <View style={styles.section}>
@@ -276,36 +282,36 @@ export default function NewTripScreen() {
             </ThemedText>
           </TouchableOpacity>
         </View>
+      </KeyboardAvoidingView>
 
-        {/* Date/Time Pickers */}
-        {showDatePicker && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onDateChange}
-          />
-        )}
+      {/* Date/Time Pickers */}
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
 
-        {showStartTimePicker && (
-          <DateTimePicker
-            value={startTime}
-            mode="time"
-            display="default"
-            onChange={onStartTimeChange}
-          />
-        )}
+      {showStartTimePicker && (
+        <DateTimePicker
+          value={startTime}
+          mode="time"
+          display="default"
+          onChange={onStartTimeChange}
+        />
+      )}
 
-        {showEndTimePicker && (
-          <DateTimePicker
-            value={endTime || new Date()}
-            mode="time"
-            display="default"
-            onChange={onEndTimeChange}
-          />
-        )}
-      </ThemedView>
-    </KeyboardAvoidingView>
+      {showEndTimePicker && (
+        <DateTimePicker
+          value={endTime || new Date()}
+          mode="time"
+          display="default"
+          onChange={onEndTimeChange}
+        />
+      )}
+    </ThemedView>
   );
 }
 
@@ -334,9 +340,15 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 24,
   },
+  keyboardContainer: {
+    flex: 1,
+  },
   scrollContainer: {
     flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: 16,
+    paddingBottom: 20,
   },
   section: {
     marginBottom: 24,
