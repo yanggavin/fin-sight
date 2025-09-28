@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { databaseService, FishingTrip } from '@/services/database';
 import { locationService } from '@/services/location';
-import { Colors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function DashboardScreen() {
@@ -99,7 +99,10 @@ export default function DashboardScreen() {
           </TouchableOpacity>
           
           <TouchableOpacity 
-            style={[styles.secondaryButton, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]} 
+            style={[styles.secondaryButton, { 
+              backgroundColor: Colors[colorScheme ?? 'light'].secondary,
+              borderColor: Colors[colorScheme ?? 'light'].primary 
+            }]} 
             onPress={handleLogCatch}
           >
             <ThemedText style={[styles.secondaryButtonText, { color: Colors[colorScheme ?? 'light'].primary }]}>
@@ -128,7 +131,11 @@ export default function DashboardScreen() {
             recentTrips.map((trip) => (
               <TouchableOpacity
                 key={trip.id}
-                style={[styles.catchCard, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
+                style={[styles.catchCard, { 
+                  backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+                  borderColor: Colors[colorScheme ?? 'light'].border,
+                  shadowColor: Colors[colorScheme ?? 'light'].shadow 
+                }]}
                 onPress={() => router.push(`/trip/${trip.id}`)}
               >
                 <View style={[styles.catchImage, { backgroundColor: Colors[colorScheme ?? 'light'].surface }]}>
@@ -159,100 +166,109 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.md,
   },
   headerSpacer: {
     width: 40,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: Typography.fontSize['2xl'],
+    fontWeight: Typography.fontWeight.extrabold,
     textAlign: 'center',
     flex: 1,
   },
   settingsButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: BorderRadius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   scrollContainer: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.md,
   },
   actionsContainer: {
-    marginTop: 16,
-    gap: 16,
+    marginTop: Spacing.md,
+    gap: Spacing.sm,
   },
   primaryButton: {
     height: 56,
-    borderRadius: 8,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 6,
   },
   primaryButtonText: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.bold,
   },
   secondaryButton: {
     height: 56,
-    borderRadius: 8,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
   },
   secondaryButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.bold,
   },
   sectionContainer: {
-    marginTop: 32,
+    marginTop: Spacing.xl,
   },
   sectionTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 16,
+    fontSize: Typography.fontSize['2xl'],
+    fontWeight: Typography.fontWeight.bold,
+    marginBottom: Spacing.md,
   },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.lg,
   },
   emptyImagePlaceholder: {
     width: 80,
     height: 80,
-    borderRadius: 8,
+    borderRadius: BorderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.lg,
   },
   emptyText: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.semibold,
+    marginBottom: Spacing.xs,
+    textAlign: 'center',
   },
   emptySubtext: {
-    fontSize: 14,
+    fontSize: Typography.fontSize.sm,
     opacity: 0.6,
+    textAlign: 'center',
   },
   catchCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-    gap: 16,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.sm,
+    gap: Spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   catchImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 8,
+    width: 56,
+    height: 56,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -260,12 +276,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   catchTitle: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: Typography.fontSize.base,
+    fontWeight: Typography.fontWeight.semibold,
     marginBottom: 2,
   },
   catchSubtitle: {
-    fontSize: 14,
+    fontSize: Typography.fontSize.sm,
     opacity: 0.6,
   },
 });

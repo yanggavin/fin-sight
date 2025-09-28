@@ -19,7 +19,7 @@ import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { databaseService } from '@/services/database';
 import { locationService, LocationData } from '@/services/location';
-import { Colors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function NewTripScreen() {
@@ -170,7 +170,10 @@ export default function NewTripScreen() {
           {/* Species Selection */}
           <View style={styles.section}>
             <ThemedText style={styles.sectionLabel}>Species</ThemedText>
-            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+            <View style={[styles.inputWrapper, { 
+              backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+              borderColor: Colors[colorScheme ?? 'light'].border 
+            }]}>
               <TextInput
                 style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
                 placeholder="Enter species caught"
@@ -184,7 +187,10 @@ export default function NewTripScreen() {
           {/* Count */}
           <View style={styles.section}>
             <ThemedText style={styles.sectionLabel}>Count</ThemedText>
-            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+            <View style={[styles.inputWrapper, { 
+              backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+              borderColor: Colors[colorScheme ?? 'light'].border 
+            }]}>
               <TextInput
                 style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
                 placeholder="1"
@@ -199,7 +205,10 @@ export default function NewTripScreen() {
           <View style={styles.doubleInputContainer}>
             <View style={[styles.section, { flex: 1 }]}>
               <ThemedText style={styles.sectionLabel}>Weight (kg)</ThemedText>
-              <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+              <View style={[styles.inputWrapper, { 
+                backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+                borderColor: Colors[colorScheme ?? 'light'].border 
+              }]}>
                 <TextInput
                   style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
                   placeholder="1.6"
@@ -212,7 +221,10 @@ export default function NewTripScreen() {
             </View>
             <View style={[styles.section, { flex: 1 }]}>
               <ThemedText style={styles.sectionLabel}>Length (in)</ThemedText>
-              <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+              <View style={[styles.inputWrapper, { 
+                backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+                borderColor: Colors[colorScheme ?? 'light'].border 
+              }]}>
                 <TextInput
                   style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
                   placeholder="18"
@@ -226,7 +238,10 @@ export default function NewTripScreen() {
           {/* Location Section */}
           <View style={styles.section}>
             <ThemedText style={styles.sectionLabel}>Location</ThemedText>
-            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+            <View style={[styles.inputWrapper, { 
+              backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
+              borderColor: Colors[colorScheme ?? 'light'].border 
+            }]}>
               <TextInput
                 style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
                 placeholder="Enter fishing location"
@@ -322,20 +337,20 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
     paddingTop: 60,
   },
   backButton: {
-    padding: 8,
-    marginRight: 8,
+    padding: Spacing.sm,
+    marginRight: Spacing.sm,
   },
   headerTitle: {
     flex: 1,
     textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '700',
-    paddingRight: 32, // Compensate for back button
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.bold,
+    paddingRight: Spacing.xl, // Compensate for back button
   },
   headerSpacer: {
     width: 24,
@@ -347,75 +362,75 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+    paddingHorizontal: Spacing.md,
+    paddingBottom: Spacing.lg,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
+    fontSize: Typography.fontSize.sm,
+    fontWeight: Typography.fontWeight.medium,
+    marginBottom: Spacing.sm,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 16,
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.bold,
+    marginBottom: Spacing.md,
   },
   inputWrapper: {
-    borderRadius: 8,
-    borderWidth: 0,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
   },
   input: {
     height: 48,
-    paddingHorizontal: 16,
-    fontSize: 16,
+    paddingHorizontal: Spacing.md,
+    fontSize: Typography.fontSize.base,
     borderWidth: 0,
   },
   doubleInputContainer: {
     flexDirection: 'row',
-    gap: 16,
+    gap: Spacing.md,
   },
   toggleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 24,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.lg,
   },
   weatherCard: {
-    borderRadius: 8,
-    paddingHorizontal: 16,
+    borderRadius: BorderRadius.lg,
+    paddingHorizontal: Spacing.md,
   },
   weatherRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: Spacing.md,
   },
   weatherLabel: {
-    fontSize: 14,
+    fontSize: Typography.fontSize.sm,
     opacity: 0.6,
   },
   weatherValue: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: Typography.fontSize.sm,
+    fontWeight: Typography.fontWeight.medium,
   },
   weatherDivider: {
     height: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    marginHorizontal: -16,
+    marginHorizontal: -Spacing.md,
   },
   footer: {
-    padding: 16,
+    padding: Spacing.md,
     borderTopWidth: 1,
   },
   saveButton: {
-    height: 48,
-    borderRadius: 8,
+    height: 52,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -424,7 +439,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: Typography.fontSize.lg,
+    fontWeight: Typography.fontWeight.bold,
   },
 });
