@@ -37,7 +37,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The largemouth bass is a carnivorous freshwater gamefish in the Centrarchidae family. It is the state fish of Alabama, Georgia, Mississippi, and Tennessee.',
     habitat: ['Lakes', 'Ponds', 'Rivers', 'Reservoirs'],
     avgLength: '12-16 inches',
-    avgWeight: '1-5 lbs',
+    avgWeight: '0.5-2.3 kg',
     season: ['Spring', 'Summer', 'Fall'],
     difficulty: 'Medium',
     tips: [
@@ -55,7 +55,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'Rainbow trout are species of trout and salmon native to cold-water tributaries of the Pacific Ocean in Asia and North America.',
     habitat: ['Streams', 'Rivers', 'Lakes', 'Cold Water'],
     avgLength: '10-14 inches',
-    avgWeight: '0.5-2 lbs',
+    avgWeight: '0.2-0.9 kg',
     season: ['Spring', 'Fall', 'Winter'],
     difficulty: 'Medium',
     tips: [
@@ -73,7 +73,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The smallmouth bass is a species of freshwater fish in the sunfish family of the order Perciformes.',
     habitat: ['Rocky Lakes', 'Rivers', 'Clear Water'],
     avgLength: '10-14 inches',
-    avgWeight: '1-3 lbs',
+    avgWeight: '0.5-1.4 kg',
     season: ['Spring', 'Summer', 'Fall'],
     difficulty: 'Hard',
     tips: [
@@ -91,7 +91,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The northern pike is a species of carnivorous fish of the genus Esox. They are typical of brackish and fresh waters of the Northern Hemisphere.',
     habitat: ['Weedy Lakes', 'Rivers', 'Shallow Bays'],
     avgLength: '18-24 inches',
-    avgWeight: '2-8 lbs',
+    avgWeight: '0.9-3.6 kg',
     season: ['Spring', 'Fall', 'Winter'],
     difficulty: 'Hard',
     tips: [
@@ -109,7 +109,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The channel catfish is North America\'s most numerous catfish species. It is the official fish of Kansas, Missouri, Iowa, Nebraska, and Tennessee.',
     habitat: ['Rivers', 'Lakes', 'Ponds', 'Streams'],
     avgLength: '12-20 inches',
-    avgWeight: '1-4 lbs',
+    avgWeight: '0.5-1.8 kg',
     season: ['Spring', 'Summer', 'Fall'],
     difficulty: 'Easy',
     tips: [
@@ -127,7 +127,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The bluegill is a species of freshwater fish sometimes referred to as "bream," "brim," "sunny," or "copper nose."',
     habitat: ['Ponds', 'Lakes', 'Slow Rivers'],
     avgLength: '6-8 inches',
-    avgWeight: '0.25-0.5 lbs',
+    avgWeight: '0.1-0.2 kg',
     season: ['Spring', 'Summer', 'Fall'],
     difficulty: 'Easy',
     tips: [
@@ -145,7 +145,7 @@ const FISH_DATABASE: FishSpecies[] = [
     description: 'The red drum is a game fish found in the Atlantic Ocean from Massachusetts to Florida and in the Gulf of Mexico from Florida to northern Mexico.',
     habitat: ['Saltwater', 'Coastal Waters', 'Estuaries', 'Surf'],
     avgLength: '20-30 inches',
-    avgWeight: '5-15 lbs',
+    avgWeight: '2.3-6.8 kg',
     season: ['Spring', 'Summer', 'Fall'],
     difficulty: 'Medium',
     tips: [

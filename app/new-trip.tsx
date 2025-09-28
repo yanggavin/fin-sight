@@ -192,11 +192,11 @@ export default function NewTripScreen() {
           {/* Weight and Length */}
           <View style={styles.doubleInputContainer}>
             <View style={[styles.section, { flex: 1 }]}>
-              <ThemedText style={styles.sectionLabel}>Weight (lbs)</ThemedText>
+              <ThemedText style={styles.sectionLabel}>Weight (kg)</ThemedText>
               <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
                 <TextInput
                   style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
-                  placeholder="3.5"
+                  placeholder="1.6"
                   placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
                   keyboardType="numeric"
                   value={temperature}

@@ -222,7 +222,7 @@ export default function TripDetailScreen() {
                     )}
                     {catch_.weight && (
                       <ThemedText style={styles.catchDetail}>
-                        Weight: {catch_.weight} lbs
+                        Weight: {catch_.weight} kg
                       </ThemedText>
                     )}
                     {catch_.bait && (
