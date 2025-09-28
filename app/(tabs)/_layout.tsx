@@ -12,36 +12,50 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].primary,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: Colors[colorScheme ?? 'light'].background,
+          borderTopColor: Colors[colorScheme ?? 'light'].border,
+          borderTopWidth: 1,
+          paddingBottom: 4,
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '500',
+          marginTop: 2,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dashboard',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <IconSymbol size={22} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="trips"
         options={{
-          title: 'My Trips',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="list.bullet" color={color} />,
+          title: 'Trips',
+          tabBarIcon: ({ color }) => <IconSymbol size={22} name="map.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="stats"
         options={{
-          title: 'Statistics',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
+          title: 'Log',
+          tabBarIcon: ({ color }) => <IconSymbol size={22} name="plus.app.fill" color={color} />,
+          tabBarLabel: 'Log',
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
+          title: 'Gear',
+          tabBarIcon: ({ color }) => <IconSymbol size={22} name="list.bullet" color={color} />,
         }}
       />
     </Tabs>

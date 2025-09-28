@@ -5,27 +5,36 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primaryColor = '#1dc962';
+const backgroundLight = '#f6f8f7';
+const backgroundDark = '#112117';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-    cardBackground: '#f8f9fa',
+    text: '#1f2937',
+    background: backgroundLight,
+    tint: primaryColor,
+    icon: '#6b7280',
+    tabIconDefault: '#9ca3af',
+    tabIconSelected: primaryColor,
+    cardBackground: 'rgba(0, 0, 0, 0.05)',
+    surface: 'rgba(0, 0, 0, 0.02)',
+    primary: primaryColor,
+    secondary: 'rgba(29, 201, 98, 0.1)',
+    border: 'rgba(0, 0, 0, 0.1)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-    cardBackground: '#1f2937',
+    text: '#f9fafb',
+    background: backgroundDark,
+    tint: primaryColor,
+    icon: '#9ca3af',
+    tabIconDefault: '#6b7280',
+    tabIconSelected: primaryColor,
+    cardBackground: 'rgba(255, 255, 255, 0.05)',
+    surface: 'rgba(255, 255, 255, 0.02)',
+    primary: primaryColor,
+    secondary: 'rgba(29, 201, 98, 0.2)',
+    border: 'rgba(255, 255, 255, 0.1)',
   },
 };
 

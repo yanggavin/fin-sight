@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { StatusBar } from 'expo-status-bar';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -147,164 +148,134 @@ export default function NewTripScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ThemedView style={styles.container}>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        
+        {/* Sticky Header */}
+        <View style={[styles.header, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <IconSymbol name="xmark" size={20} color={Colors[colorScheme ?? 'light'].text} />
+          </TouchableOpacity>
+          <ThemedText style={styles.headerTitle}>Log Catch</ThemedText>
+          <View style={styles.headerSpacer} />
+        </View>
+
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-          <ThemedView style={styles.header}>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()}>
-              <IconSymbol name="xmark" size={20} color={Colors[colorScheme ?? 'light'].text} />
-            </TouchableOpacity>
-            <ThemedText type="title" style={styles.title}>New Fishing Trip</ThemedText>
-            <View style={styles.placeholder} />
-          </ThemedView>
 
-          {/* Date and Time Section */}
-          <ThemedView style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>When</ThemedText>
-            
-            <TouchableOpacity 
-              style={[styles.inputContainer, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
-              onPress={() => setShowDatePicker(true)}
-            >
-              <IconSymbol name="calendar" size={20} color={Colors[colorScheme ?? 'light'].tabIconDefault} />
-              <ThemedText style={styles.inputText}>{formatDate(date)}</ThemedText>
-            </TouchableOpacity>
-
-            <View style={styles.timeContainer}>
-              <TouchableOpacity 
-                style={[styles.timeInput, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
-                onPress={() => setShowStartTimePicker(true)}
-              >
-                <ThemedText style={styles.timeLabel}>Start Time</ThemedText>
-                <ThemedText style={styles.inputText}>{formatTime(startTime)}</ThemedText>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.timeInput, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
-                onPress={() => setShowEndTimePicker(true)}
-              >
-                <ThemedText style={styles.timeLabel}>End Time</ThemedText>
-                <ThemedText style={styles.inputText}>
-                  {endTime ? formatTime(endTime) : 'Optional'}
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
-          </ThemedView>
-
-          {/* Location Section */}
-          <ThemedView style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>Location</ThemedText>
-            
-            <View style={styles.locationToggleContainer}>
-              <ThemedText>Use current location</ThemedText>
-              <Switch
-                value={useCurrentLocation}
-                onValueChange={setUseCurrentLocation}
-                trackColor={{ false: '#767577', true: '#4A90E2' }}
-                thumbColor={useCurrentLocation ? '#ffffff' : '#f4f3f4'}
+          {/* Species Selection */}
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionLabel}>Species</ThemedText>
+            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+              <TextInput
+                style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+                placeholder="Enter species caught"
+                placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+                value={locationName}
+                onChangeText={setLocationName}
               />
             </View>
+          </View>
 
-            {useCurrentLocation && (
-              <TouchableOpacity
-                style={[styles.locationButton, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
-                onPress={getCurrentLocation}
-                disabled={autoLocationLoading}
-              >
-                <IconSymbol 
-                  name={autoLocationLoading ? "arrow.2.circlepath" : "location"} 
-                  size={20} 
-                  color={Colors[colorScheme ?? 'light'].tabIconDefault} 
-                />
-                <ThemedText style={styles.locationButtonText}>
-                  {autoLocationLoading ? 'Getting location...' : 'Refresh location'}
-                </ThemedText>
-              </TouchableOpacity>
-            )}
-
-            <TextInput
-              style={[styles.textInput, { 
-                backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
-                color: Colors[colorScheme ?? 'light'].text 
-              }]}
-              placeholder="Enter location name"
-              placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
-              value={locationName}
-              onChangeText={setLocationName}
-              multiline
-            />
-
-            {coordinates && (
-              <ThemedText style={styles.coordinatesText}>
-                📍 {coordinates.latitude.toFixed(6)}, {coordinates.longitude.toFixed(6)}
-              </ThemedText>
-            )}
-          </ThemedView>
-
-          {/* Weather Section */}
-          <ThemedView style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>Weather (Optional)</ThemedText>
-            
-            <View style={styles.weatherContainer}>
+          {/* Count */}
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionLabel}>Count</ThemedText>
+            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
               <TextInput
-                style={[styles.textInput, { 
-                  flex: 1,
-                  backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
-                  color: Colors[colorScheme ?? 'light'].text 
-                }]}
-                placeholder="e.g., Sunny, Cloudy, Rainy"
+                style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+                placeholder="1"
+                placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+                keyboardType="numeric"
+                defaultValue="1"
+              />
+            </View>
+          </View>
+
+          {/* Weight and Length */}
+          <View style={styles.doubleInputContainer}>
+            <View style={[styles.section, { flex: 1 }]}>
+              <ThemedText style={styles.sectionLabel}>Weight (lbs)</ThemedText>
+              <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+                <TextInput
+                  style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+                  placeholder="3.5"
+                  placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+                  keyboardType="numeric"
+                  value={temperature}
+                  onChangeText={setTemperature}
+                />
+              </View>
+            </View>
+            <View style={[styles.section, { flex: 1 }]}>
+              <ThemedText style={styles.sectionLabel}>Length (in)</ThemedText>
+              <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+                <TextInput
+                  style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+                  placeholder="18"
+                  placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+          </View>
+
+          {/* Location Section */}
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionLabel}>Location</ThemedText>
+            <View style={[styles.inputWrapper, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+              <TextInput
+                style={[styles.input, { color: Colors[colorScheme ?? 'light'].text }]}
+                placeholder="Enter fishing location"
                 placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
                 value={weather}
                 onChangeText={setWeather}
               />
-
-              <TextInput
-                style={[styles.temperatureInput, { 
-                  backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
-                  color: Colors[colorScheme ?? 'light'].text 
-                }]}
-                placeholder="°F"
-                placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
-                value={temperature}
-                onChangeText={setTemperature}
-                keyboardType="numeric"
-              />
             </View>
-          </ThemedView>
+          </View>
 
-          {/* Notes Section */}
-          <ThemedView style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>Notes (Optional)</ThemedText>
-            
-            <TextInput
-              style={[styles.notesInput, { 
-                backgroundColor: Colors[colorScheme ?? 'light'].cardBackground,
-                color: Colors[colorScheme ?? 'light'].text 
-              }]}
-              placeholder="Add any notes about this trip..."
-              placeholderTextColor={Colors[colorScheme ?? 'light'].tabIconDefault}
-              value={notes}
-              onChangeText={setNotes}
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
+          {/* Auto-Location Toggle */}
+          <View style={[styles.toggleContainer, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+            <ThemedText style={styles.sectionLabel}>Use current location</ThemedText>
+            <Switch
+              value={useCurrentLocation}
+              onValueChange={setUseCurrentLocation}
+              trackColor={{ false: Colors[colorScheme ?? 'light'].tabIconDefault, true: Colors[colorScheme ?? 'light'].primary }}
+              thumbColor={'#ffffff'}
             />
-          </ThemedView>
+          </View>
+
+          {/* Weather Info */}
+          <View style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>Weather</ThemedText>
+            <View style={[styles.weatherCard, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}>
+              <View style={styles.weatherRow}>
+                <ThemedText style={styles.weatherLabel}>Temperature</ThemedText>
+                <ThemedText style={styles.weatherValue}>68°F</ThemedText>
+              </View>
+              <View style={styles.weatherDivider} />
+              <View style={styles.weatherRow}>
+                <ThemedText style={styles.weatherLabel}>Wind</ThemedText>
+                <ThemedText style={styles.weatherValue}>5 mph</ThemedText>
+              </View>
+              <View style={styles.weatherDivider} />
+              <View style={styles.weatherRow}>
+                <ThemedText style={styles.weatherLabel}>Pressure</ThemedText>
+                <ThemedText style={styles.weatherValue}>1012 hPa</ThemedText>
+              </View>
+            </View>
+          </View>
         </ScrollView>
 
-        {/* Save Button */}
-        <TouchableOpacity 
-          style={[styles.saveButton, loading && styles.saveButtonDisabled]}
-          onPress={handleSaveTrip}
-          disabled={loading}
-        >
-          {loading ? (
-            <ThemedText style={styles.saveButtonText}>Saving...</ThemedText>
-          ) : (
-            <>
-              <IconSymbol name="checkmark.circle" size={20} color="#ffffff" />
-              <ThemedText style={styles.saveButtonText}>Save Trip</ThemedText>
-            </>
-          )}
-        </TouchableOpacity>
+        {/* Sticky Footer with Save Button */}
+        <View style={[styles.footer, { backgroundColor: Colors[colorScheme ?? 'light'].background, borderTopColor: Colors[colorScheme ?? 'light'].border }]}>
+          <TouchableOpacity 
+            style={[styles.saveButton, { backgroundColor: Colors[colorScheme ?? 'light'].primary }, loading && styles.saveButtonDisabled]}
+            onPress={handleSaveTrip}
+            disabled={loading}
+          >
+            <ThemedText style={styles.saveButtonText}>
+              {loading ? 'Saving...' : 'Save Catch'}
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
 
         {/* Date/Time Pickers */}
         {showDatePicker && (
@@ -342,118 +313,99 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
     paddingTop: 60,
   },
-  cancelButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+  backButton: {
+    padding: 8,
+    marginRight: 8,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  headerTitle: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '700',
+    paddingRight: 32, // Compensate for back button
   },
-  placeholder: {
-    width: 32,
+  headerSpacer: {
+    width: 24,
+  },
+  scrollContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   section: {
-    marginBottom: 30,
+    marginBottom: 24,
+  },
+  sectionLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 8,
   },
   sectionTitle: {
-    marginBottom: 15,
     fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 16,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 12,
-    gap: 12,
+  inputWrapper: {
+    borderRadius: 8,
+    borderWidth: 0,
   },
-  inputText: {
+  input: {
+    height: 48,
+    paddingHorizontal: 16,
     fontSize: 16,
+    borderWidth: 0,
   },
-  timeContainer: {
+  doubleInputContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
   },
-  timeInput: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 10,
-  },
-  timeLabel: {
-    fontSize: 12,
-    opacity: 0.7,
-    marginBottom: 4,
-  },
-  locationToggleContainer: {
+  toggleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  locationButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 8,
-    marginBottom: 12,
-    gap: 8,
+    marginBottom: 24,
   },
-  locationButtonText: {
-    fontSize: 14,
+  weatherCard: {
+    borderRadius: 8,
+    paddingHorizontal: 16,
   },
-  textInput: {
-    padding: 16,
-    borderRadius: 10,
-    fontSize: 16,
-    minHeight: 50,
-  },
-  coordinatesText: {
-    fontSize: 12,
-    opacity: 0.7,
-    marginTop: 8,
-    fontFamily: 'monospace',
-  },
-  weatherContainer: {
+  weatherRow: {
     flexDirection: 'row',
-    gap: 12,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
   },
-  temperatureInput: {
-    width: 80,
-    padding: 16,
-    borderRadius: 10,
-    fontSize: 16,
-    textAlign: 'center',
+  weatherLabel: {
+    fontSize: 14,
+    opacity: 0.6,
   },
-  notesInput: {
+  weatherValue: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  weatherDivider: {
+    height: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    marginHorizontal: -16,
+  },
+  footer: {
     padding: 16,
-    borderRadius: 10,
-    fontSize: 16,
-    minHeight: 100,
+    borderTopWidth: 1,
   },
   saveButton: {
-    backgroundColor: '#4A90E2',
-    flexDirection: 'row',
+    height: 48,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-    margin: 20,
-    borderRadius: 12,
-    gap: 8,
   },
   saveButtonDisabled: {
     opacity: 0.6,
@@ -461,6 +413,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 });

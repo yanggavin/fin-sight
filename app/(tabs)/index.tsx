@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, RefreshControl, TouchableOpacity, Alert } from 'react-native';
-import { Image } from 'expo-image';
+import { StyleSheet, RefreshControl, TouchableOpacity, Alert, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { databaseService, FishingTrip } from '@/services/database';
 import { locationService } from '@/services/location';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function DashboardScreen() {
+  const colorScheme = useColorScheme();
   const [stats, setStats] = useState({
     totalTrips: 0,
     totalCatches: 0,
@@ -27,7 +29,7 @@ export default function DashboardScreen() {
       
       const [statsData, trips] = await Promise.all([
         databaseService.getTripStats(),
-        databaseService.getTrips(5), // Get last 5 trips
+        databaseService.getTrips(3), // Get last 3 trips for cleaner UI
       ]);
       
       setStats(statsData);
@@ -47,7 +49,11 @@ export default function DashboardScreen() {
     setRefreshing(false);
   };
 
-  const handleNewTrip = async () => {
+  const handleIdentifyFish = () => {
+    Alert.alert('Fish Identification', 'AI fish identification feature coming soon!');
+  };
+
+  const handleLogCatch = async () => {
     // Request location permission if needed
     const hasPermission = await locationService.requestPermissions();
     if (!hasPermission) {
@@ -65,227 +71,201 @@ export default function DashboardScreen() {
     router.push('/new-trip');
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#4A90E2', dark: '#2C5282' }}
-      headerImage={
-        <IconSymbol
-          size={150}
-          color="#ffffff"
-          name="fish.fill"
-          style={styles.headerIcon}
-        />
-      }
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Fishing Log</ThemedText>
-        <ThemedText style={styles.subtitle}>
-          Track your fishing adventures
-        </ThemedText>
-      </ThemedView>
+    <ThemedView style={styles.container}>
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.headerSpacer} />
+        <ThemedText style={styles.headerTitle}>FishLog</ThemedText>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => router.push('/explore')}>
+          <IconSymbol name="gearshape.fill" size={20} color={Colors[colorScheme ?? 'light'].tabIconDefault} />
+        </TouchableOpacity>
+      </View>
 
-      {/* Quick Stats */}
-      <ThemedView style={styles.statsContainer}>
-        <ThemedView style={styles.statBox}>
-          <ThemedText type="subtitle" style={styles.statNumber}>
-            {stats.totalTrips}
-          </ThemedText>
-          <ThemedText style={styles.statLabel}>Trips</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.statBox}>
-          <ThemedText type="subtitle" style={styles.statNumber}>
-            {stats.totalCatches}
-          </ThemedText>
-          <ThemedText style={styles.statLabel}>Catches</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.statBox}>
-          <ThemedText type="subtitle" style={styles.statNumber}>
-            {stats.avgCatchesPerTrip.toFixed(1)}
-          </ThemedText>
-          <ThemedText style={styles.statLabel}>Avg/Trip</ThemedText>
-        </ThemedView>
-      </ThemedView>
-
-      {stats.favoriteSpecies && (
-        <ThemedView style={styles.favoriteContainer}>
-          <ThemedText type="defaultSemiBold">
-            Favorite Species: {stats.favoriteSpecies}
-          </ThemedText>
-        </ThemedView>
-      )}
-
-      {/* New Trip Button */}
-      <TouchableOpacity style={styles.newTripButton} onPress={handleNewTrip}>
-        <IconSymbol name="plus.circle.fill" size={24} color="#ffffff" />
-        <ThemedText style={styles.newTripText}>Start New Trip</ThemedText>
-      </TouchableOpacity>
-
-      {/* Recent Trips */}
-      <ThemedView style={styles.sectionContainer}>
-        <ThemedText type="subtitle" style={styles.sectionTitle}>
-          Recent Trips
-        </ThemedText>
-        {recentTrips.length === 0 ? (
-          <ThemedView style={styles.emptyState}>
-            <IconSymbol name="fish" size={48} color="#999" />
-            <ThemedText style={styles.emptyText}>
-              No trips recorded yet.
+      <ScrollView 
+        style={styles.scrollContainer} 
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Main Action Buttons */}
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity 
+            style={[styles.primaryButton, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]} 
+            onPress={handleIdentifyFish}
+          >
+            <ThemedText style={styles.primaryButtonText}>Identify Fish</ThemedText>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.secondaryButton, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]} 
+            onPress={handleLogCatch}
+          >
+            <ThemedText style={[styles.secondaryButtonText, { color: Colors[colorScheme ?? 'light'].primary }]}>
+              Log Catch
             </ThemedText>
-            <ThemedText style={styles.emptySubtext}>
-              Start your first fishing trip to begin tracking your adventures!
-            </ThemedText>
-          </ThemedView>
-        ) : (
-          recentTrips.map((trip) => (
-            <TouchableOpacity
-              key={trip.id}
-              style={styles.tripCard}
-              onPress={() => router.push(`/trip/${trip.id}`)}
-            >
-              <ThemedView style={styles.tripHeader}>
-                <ThemedText type="defaultSemiBold">
-                  {trip.locationName}
-                </ThemedText>
-                <ThemedText style={styles.tripDate}>
-                  {formatDate(trip.date)}
-                </ThemedText>
-              </ThemedView>
-              {trip.notes && (
-                <ThemedText style={styles.tripNotes} numberOfLines={2}>
-                  {trip.notes}
-                </ThemedText>
-              )}
-              <ThemedView style={styles.tripFooter}>
-                <ThemedText style={styles.tripTime}>
-                  {trip.startTime} {trip.endTime && `- ${trip.endTime}`}
-                </ThemedText>
-                <IconSymbol name="chevron.right" size={16} color="#999" />
-              </ThemedView>
-            </TouchableOpacity>
-          ))
-        )}
-      </ThemedView>
-    </ParallaxScrollView>
+          </TouchableOpacity>
+        </View>
+
+        {/* Recent Catches Section */}
+        <View style={styles.sectionContainer}>
+          <ThemedText style={styles.sectionTitle}>Recent Catches</ThemedText>
+          
+          {recentTrips.length === 0 ? (
+            <View style={styles.emptyState}>
+              <View style={[styles.emptyImagePlaceholder, { backgroundColor: Colors[colorScheme ?? 'light'].surface }]}>
+                <IconSymbol name="fish.fill" size={32} color={Colors[colorScheme ?? 'light'].tabIconDefault} />
+              </View>
+              <ThemedText style={styles.emptyText}>
+                No catches yet
+              </ThemedText>
+              <ThemedText style={styles.emptySubtext}>
+                Start your first fishing trip!
+              </ThemedText>
+            </View>
+          ) : (
+            recentTrips.map((trip) => (
+              <TouchableOpacity
+                key={trip.id}
+                style={[styles.catchCard, { backgroundColor: Colors[colorScheme ?? 'light'].cardBackground }]}
+                onPress={() => router.push(`/trip/${trip.id}`)}
+              >
+                <View style={[styles.catchImage, { backgroundColor: Colors[colorScheme ?? 'light'].surface }]}>
+                  <IconSymbol name="fish.fill" size={20} color={Colors[colorScheme ?? 'light'].primary} />
+                </View>
+                <View style={styles.catchInfo}>
+                  <ThemedText style={styles.catchTitle}>{trip.locationName}</ThemedText>
+                  <ThemedText style={styles.catchSubtitle}>
+                    {new Date(trip.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  </ThemedText>
+                </View>
+                <IconSymbol name="chevron.right" size={16} color={Colors[colorScheme ?? 'light'].tabIconDefault} />
+              </TouchableOpacity>
+            ))
+          )}
+        </View>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
+  container: {
+    flex: 1,
+    paddingTop: 60,
   },
-  subtitle: {
-    fontSize: 16,
-    opacity: 0.7,
-    marginTop: 4,
-  },
-  headerIcon: {
-    bottom: -30,
-    left: 20,
-    position: 'absolute',
-  },
-  statsContainer: {
+  header: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    paddingVertical: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 10,
-  },
-  statBox: {
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  headerSpacer: {
+    width: 40,
   },
-  statLabel: {
-    fontSize: 12,
-    opacity: 0.7,
-    marginTop: 2,
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+    flex: 1,
   },
-  favoriteContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  newTripButton: {
-    backgroundColor: '#4A90E2',
-    flexDirection: 'row',
+  settingsButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 30,
-    gap: 8,
   },
-  newTripText: {
+  scrollContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  actionsContainer: {
+    marginTop: 16,
+    gap: 16,
+  },
+  primaryButton: {
+    height: 56,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  primaryButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
+  },
+  secondaryButton: {
+    height: 56,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondaryButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
   },
   sectionContainer: {
-    marginBottom: 20,
+    marginTop: 32,
   },
   sectionTitle: {
-    marginBottom: 15,
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 16,
   },
   emptyState: {
     alignItems: 'center',
-    padding: 30,
-    opacity: 0.6,
+    paddingVertical: 40,
+  },
+  emptyImagePlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   emptyText: {
     fontSize: 16,
-    marginTop: 10,
-    textAlign: 'center',
+    fontWeight: '600',
+    marginBottom: 4,
   },
   emptySubtext: {
     fontSize: 14,
-    marginTop: 5,
-    textAlign: 'center',
-    opacity: 0.7,
+    opacity: 0.6,
   },
-  tripCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  tripHeader: {
+  catchCard: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    gap: 16,
   },
-  tripDate: {
-    fontSize: 12,
-    opacity: 0.7,
+  catchImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  tripNotes: {
+  catchInfo: {
+    flex: 1,
+  },
+  catchTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  catchSubtitle: {
     fontSize: 14,
-    opacity: 0.8,
-    marginBottom: 8,
-  },
-  tripFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  tripTime: {
-    fontSize: 12,
-    opacity: 0.7,
+    opacity: 0.6,
   },
 });
